@@ -1,17 +1,7 @@
-# UniDoc-RL
 
 <div align="center">
 
-## Reinforcement Learning for Multi-turn Visual Retrieval and Region-grounded Reasoning on Long Documents
-
-<p><strong>An academic-style open-source codebase for document-centric visual RAG</strong></p>
-
-<p>
-  <img src="https://img.shields.io/badge/status-research%20code-blue" alt="status">
-  <img src="https://img.shields.io/badge/modality-document%20images-orange" alt="modality">
-  <img src="https://img.shields.io/badge/training-RL%20%2B%20synthetic%20CoT-green" alt="training">
-  <img src="https://img.shields.io/badge/backbone-Qwen%20VL%20%2F%20vLLM-purple" alt="backbone">
-</p>
+# UniDoc-RL: Coarse-to-Fine Visual RAG with Hierarchical Actions and Dense Rewards
 
 <p align="center">
   <img src="img/intro.png" width="88%" alt="UniDoc-RL teaser" />
@@ -21,9 +11,9 @@
 
 ## 🚀 Overview
 
-- We introduce **UniDoc-RL**, a reinforcement learning framework for **multi-turn visual retrieval-augmented reasoning** over long and visually rich documents.
-- We formulate document understanding as an iterative interaction process in which the model learns to **reason, retrieve, select, crop, and answer** rather than relying on single-shot page understanding.
-- We release the **training framework** of UniDoc-RL, including multimodal retrieval, synthetic trajectory construction, reward evaluation, and RL optimization for tool-using vision-language agents.
+- **UniDoc-RL** is a unified reinforcement learning framework for **visual document RAG**, where an LVLM agent jointly performs **retrieval, reranking, active visual perception, and reasoning** within a single decision process.
+- It formulates visual evidence acquisition as a **hierarchical sequential decision-making problem**, progressively refining information from coarse document retrieval to fine-grained image selection and region cropping.
+- To support this training paradigm, we build and release a **high-quality dataset** of multi-turn reasoning trajectories with fine-grained action annotations, and validate the framework through extensive experiments on three benchmarks.
 
 In UniDoc-RL, the model interacts with an external environment through structured actions such as `<search>`, `<select>`, `<bbox>`, and `<answer>`. This design enables the agent to progressively gather evidence from coarse page-level retrieval to fine-grained region inspection, which is especially useful for charts, tables, dense text regions, and multi-page evidence aggregation.
 
@@ -59,17 +49,14 @@ cd UniDoc-RL
 
 #### Benchmark & Training Data
 
-UniDoc-RL assumes a document QA setting where each sample contains a question, a reference answer, and document-level supervision signals used during retrieval and reward computation. In practice, the RL stage expects **Parquet** files, while the synthetic data pipeline typically starts from **JSON/JSONL** annotations.
+First, download the training datasets used in the paper from their official release pages or project links. After downloading, reorganize all samples into a unified **JSON** format so they can be further converted for synthetic data generation.
 
-At a minimum, each sample should provide:
-
+Every sample should contain:
 - a unique sample id,
 - the user question,
 - the reference answer,
-- document/page-level metadata,
-- optional region-level supervision for crop-based rewards.
-
-An example annotation is shown below:
+- the document or page identifier,
+- optional metadata such as page index, evidence type, and question type.
 
 ```json
 {
@@ -77,21 +64,13 @@ An example annotation is shown below:
   "query": "What is the reported top-1 accuracy in the ablation study?",
   "reference_answer": "84.7%",
   "meta_info": {
-    "file_name": "example_document.pdf",
+    "file_name": "example_document",
     "reference_page": [12],
     "source_type": "Text/Table",
     "query_type": "Single-Hop"
   }
 }
 ```
-
-For RL training, the final parquet file is expected to contain chat-style prompts together with image fields and auxiliary metadata used by the reward manager. In particular, the local dataset loader in `RLTrain/verl/utils/dataset/rl_dataset.py` reads:
-
-- `prompt`: chat-format prompt,
-- `images`: multimodal image inputs,
-- `extra_info`: question and page metadata,
-- reward-related fields such as ground-truth answers and, when available, region annotations.
-
 
 ### Step2. Build Training Corpus & Run Multi-Modal Search Engine.
 
@@ -177,35 +156,13 @@ cd LLaMA-Factory
 pip install -e ".[torch,metrics]" --no-build-isolation
 ```
 
-Then convert your synthetic trajectories into a ShareGPT-style multimodal JSON file and place it at `LLaMA-Factory/data/unidoc_sft.json`. A minimal example is shown below:
-
-```json
-[
-  {
-    "messages": [
-      {
-        "role": "user",
-        "content": "<image>Question: What is the reported top-1 accuracy in the ablation study?"
-      },
-      {
-        "role": "assistant",
-        "content": "<think>...</think>\n<search>...</search>"
-      }
-    ],
-    "images": [
-      "/path/to/page_12.png"
-    ]
-  }
-]
-```
-
 The corresponding dataset entry has already been registered in `LLaMA-Factory/data/dataset_info.json` under the name `unidoc`, so in most cases you only need to prepare `unidoc_sft.json` with the `messages` and `images` fields.
 
 For SFT with Qwen2.5-VL:
 
 ```bash
 cd LLaMA-Factory
-CUDA_VISIBLE_DEVICES=0,1,2,3 \
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 \
 llamafactory-cli train examples/train_full/qwen2_5vl_full_sft.yaml
 ```
 
@@ -253,7 +210,7 @@ The default launcher configures GRPO-style RL optimization with multi-turn rollo
 
 ## 🙏 Acknowledgements
 
-This work is implemented based on and inspired by several open-source projects, including [verl](https://github.com/volcengine/verl), [vLLM](https://github.com/vllm-project/vllm), [LlamaIndex](https://github.com/run-llama/llama_index), and the [Qwen-VL](https://github.com/QwenLM) ecosystem. We also thank the communities behind multimodal retrieval backbones such as ColQwen for making document-centric visual RAG research more accessible.
+This work is implemented based on and inspired by several open-source projects, including [VRAG-RL](https://github.com/Alibaba-NLP/VRAG/tree/main/VRAG-RL), [verl](https://github.com/volcengine/verl), and [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory). We sincerely thank the authors and contributors of these projects for making their code and ideas publicly available.
 
 
 ## 📝 Citation
@@ -262,7 +219,7 @@ If you find this repository useful, please cite the corresponding paper. The bib
 
 ```bibtex
 @misc{unidocrl2026,
-      title={UniDoc-RL: Reinforcement Learning for Multi-turn Visual Retrieval and Region-grounded Reasoning on Long Documents},
+      title={UniDoc-RL: Coarse-to-Fine Visual RAG with Hierarchical Actions and Dense Rewards},
       author={Author List To Be Updated},
       year={2026},
       note={Project page and paper link will be updated.}
