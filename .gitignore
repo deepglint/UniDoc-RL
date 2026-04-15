@@ -1,0 +1,56 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# ===== Model weights =====
+# Large model files should be hosted on HuggingFace Hub or similar platforms
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.onnx
+*.ckpt
+models/
+
+# ===== Data assets =====
+# Large datasets should be hosted externally; keep only small examples
+data/sft/images/
+data/rl/*.parquet
+data/test_data/
+
+# ===== IDE / Editor =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== Environment =====
+.env
+.env.*
+*.log
+wandb/
+swanlog/
+mlruns/
+
+# ===== Ray / Training =====
+/tmp/ray/
+ray_results/
+checkpoints/
+output/
+
+# ===== Misc =====
+*.bak
+*.orig
+.cache/

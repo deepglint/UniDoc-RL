@@ -1,0 +1,6 @@
+aiofiles
+requests
+pillow
+opencv-python
+openai
+dirtyjson
