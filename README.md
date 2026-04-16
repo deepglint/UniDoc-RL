@@ -9,6 +9,12 @@
 
 </div>
 
+## 🤗 Hugging Face Releases
+
+- **Dataset**: [DeepGlint-AI/UniDoc-RL](https://huggingface.co/datasets/DeepGlint-AI/UniDoc-RL)
+- **Model (7B)**: [DeepGlint-AI/UniDoc-RL-7B](https://huggingface.co/DeepGlint-AI/UniDoc-RL-7B)
+- **Model (3B)**: [DeepGlint-AI/UniDoc-RL-3B](https://huggingface.co/DeepGlint-AI/UniDoc-RL-3B)
+
 ## 🚀 Overview
 
 - **UniDoc-RL** is a unified reinforcement learning framework for **visual document RAG**, where an LVLM agent jointly performs **retrieval, reranking, active visual perception, and reasoning** within a single decision process.
