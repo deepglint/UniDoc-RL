@@ -8,7 +8,7 @@ This directory contains the data-generation pipeline for multimodal chain-of-tho
 - `cot_generator.py`: core search, rerank, analysis, and crop pipeline.
 - `llm.py`: lightweight clients for Qwen-compatible text and multimodal endpoints.
 - `utils_bbox.py`: bounding-box utilities used during crop selection and visualization.
-- `run_example.sh`: example command for running the SlideVQA single-page pipeline.
+- `run_example.sh`: example command for running the SlideVQA pipeline.
 
 ## Required services
 
@@ -50,12 +50,5 @@ The raw output of `generate_cot_data.py` is a JSONL trajectory file. To use it d
 ```bash
 python convert_to_llamafactory.py \
 	--input-path /path/to/cot_output.jsonl \
-	--output-path ../LLaMA-Factory/data/unidoc_sft.json
+	--output-path ../LLaMA-Factory/data/unidoc_cot.json
 ```
-
-The converter will:
-
-- flatten nested image lists into a standard `images` array,
-- convert structured assistant actions such as rerank decisions into text tags,
-- remove trailing judge-only messages,
-- export a JSON file compatible with the `unidoc` entry in `LLaMA-Factory/data/dataset_info.json`.

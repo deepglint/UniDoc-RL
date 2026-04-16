@@ -1,6 +1,6 @@
 {
   "unidoc":{
-    "file_name": "unidoc_sft.json",
+    "file_name": "unidoc_cot.json",
     "formatting": "sharegpt",
     "columns": {
       "messages": "messages",

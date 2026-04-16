@@ -166,7 +166,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 \
 llamafactory-cli train examples/train_full/qwen2_5vl_full_sft.yaml
 ```
 
-### Step4. Run RL Training with Qwen2.5-VL-Instruct.
+### Step4. Run RL Training with SFT Model.
 
 
 #### Start Training

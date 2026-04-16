@@ -5,7 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 python "$SCRIPT_DIR/generate_cot_data.py" \
-    --data-path "json" \
+    --data-path "slidevqa.json" \
     --output-path "output_file" \
     --num-workers 40 \
     --batch-size 4 \
