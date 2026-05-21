@@ -224,10 +224,10 @@ This work is implemented based on and inspired by several open-source projects, 
 If you find this repository useful, please cite the corresponding paper. The bibliographic information can be updated once the public paper entry is finalized.
 
 ```bibtex
-@misc{unidocrl2026,
-      title={UniDoc-RL: Coarse-to-Fine Visual RAG with Hierarchical Actions and Dense Rewards},
-      author={Author List To Be Updated},
-      year={2026},
-      note={Project page and paper link will be updated.}
+@article{wang2026unidoc,
+  title={UniDoc-RL: Coarse-to-Fine Visual RAG with Hierarchical Actions and Dense Rewards},
+  author={Wang, Jun and Tan, Shuo and Sun, Zelong and Gu, Tiancheng and Zhao, Yongle and Feng, Ziyong and Yang, Kaicheng and Lu, Cewu},
+  journal={arXiv preprint arXiv:2604.14967},
+  year={2026}
 }
 ```
